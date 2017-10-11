@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.emre);
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.anne);
         detectAndFrame(bm);
 
 
@@ -95,19 +95,23 @@ public class MainActivity extends AppCompatActivity {
                                 publishProgress("Detection Finished. Nothing detected");
                                 return null;
                             }
-                            publishProgress(
-                                    String.format("Detection Finished. %d face(s) detected",
-                                            result.length));
+                            //publishProgress(
+                                    //String.format("Detection Finished. %d face(s) detected", result.length));
 
                             yuzler[i] = result[0];
                             i++;
 
                             if(i==2) {
-                                if(faceServiceClient.verify(yuzler[0].faceId, yuzler[1].faceId).isIdentical){
+                                deneme = faceServiceClient.verify(yuzler[0].faceId, yuzler[1].faceId);
+                                if(deneme.isIdentical){
                                     //yuzu tanidi
+                                    detectionProgressDialog.setMessage("tanidi..");
 
                                     /////////////
                                 }
+                                else
+                                    detectionProgressDialog.setMessage("HATA..");
+
                             }
                             return result;
                         } catch (Exception e) {
@@ -117,8 +121,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                     @Override
                     protected void onPreExecute() {
-
-                        //detectionProgressDialog.show();
+                        if(i >= 1)
+                        detectionProgressDialog.show();
                     }
                     @Override
                     protected void onProgressUpdate(String... progress) {
